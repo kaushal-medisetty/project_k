@@ -27,9 +27,22 @@ const signupSchema = new mongoose.Schema({
 })
 
 const signup =mongoose.model("signups",signupSchema)
-
 app.get("/signin",(req,res)=>{
     res.render("signin")
+})
+
+app.post("/signin",(req,res)=>{
+    user=req.body.email
+    password=req.body.password
+    console.log("sigin:"+user,password)
+    data=signup.findOne({email:user}).then((data)=>{
+      
+      if(data.email == user){
+          if(data.password == password ){
+            res.send("dashboard")
+          }
+      }
+     })
 })
 
 app.get("/",(req,res)=>{
