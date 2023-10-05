@@ -19,7 +19,7 @@ const signupSchema = new mongoose.Schema({
   name:String,
   password:String,
   email:String,
-  phone_number:Number,
+  phone_number:{type:Number},
   gender:String,
   dob: String,
   password:String
@@ -28,9 +28,14 @@ const signupSchema = new mongoose.Schema({
 
 const signup =mongoose.model("signups",signupSchema)
 
+app.get("/signin",(req,res)=>{
+    res.render("signin")
+})
+
 app.get("/",(req,res)=>{
     res.render("signup")
 })
+
 
 app.post("/signup",(req,res)=>{
 
