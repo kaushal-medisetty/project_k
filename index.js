@@ -1,48 +1,45 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const axios = require("axios");
+
 const { localsName, render } = require("ejs");
 const fs = require("fs");
 const multer = require("multer");
-const mongoose = require("mongoose");
+
+const dbs = require("./src/mongo_connect")
+const medapi = require("./src/api")
 // var encrypt = require('mongoose-encryption');
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://127.0.0.1:27017/project_k');
 
 
-const signupSchema = new mongoose.Schema({
-  name:String,
-  password:String,
-  email:String,
-  phone_number:{type:Number},
-  gender:String,
-  dob: String,
-  password:String
-
-})
-
-const signup =mongoose.model("signups",signupSchema)
 app.get("/signin",(req,res)=>{
     res.render("signin")
 })
 
-app.post("/signin",(req,res)=>{
-    user=req.body.email
-    password=req.body.password
-    console.log("sigin:"+user,password)
-    data=signup.findOne({email:user}).then((data)=>{
-      
-      if(data.email == user){
-          if(data.password == password ){
-            res.send("dashboard")
-          }
-      }
-     })
+app.get("/api",async(req,res)=>{
+  let name = "Dolo-650"
+  let valapi = await medapi.meddetails(name)
+  console.log(valapi)
+  res.json(valapi)
+})
+
+
+
+app.post("/signin",async (req,res)=>{
+    
+    console.log("sigin:"+req.body.email,req.body.password)
+    let data1={
+      user:req.body.email,
+      password:req.body.password
+    }
+    let val
+    val = await dbs.signin(data1);
+    res.send(val)
+
 })
 
 app.get("/",(req,res)=>{
@@ -58,16 +55,15 @@ app.post("/signup",(req,res)=>{
     console.log("sigup:"+req.body.gender)
     console.log("sigup:"+req.body.dob)
     console.log("sigup:"+req.body.password)
-    
-    const newperson = new signup ({
-        name:req.body.name,
-        email:req.body.email,
-        phone_number:req.body.phone,
-        gender:req.body.gender,
-        dob:req.body.dob,
-        password:req.body.password
-    })
-    newperson.save()
+    let data ={
+      name:req.body.name,
+      email:req.body.email,
+      phone_number:req.body.phone,
+      gender:req.body.gender,
+      dob:req.body.dob,
+      password:req.body.password
+    }
+    dbs.signup(data)
     
     res.redirect("/")
 })
