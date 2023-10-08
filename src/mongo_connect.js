@@ -25,16 +25,21 @@ exports.signup = async(data)=>{
 
 exports.signin= async (data1)=>{
     let k
-    return k=await signup.findOne({email:data1.user}).then((data)=>{  
-    if(data.email == data1.user){
+    return k=await signup.findOne({email:data1.user}).then((data)=>{ 
+     if(data == null){
+        return "null"
+
+     }   
+    else if(data.email == data1.user){
         if(data.password == data1.password ){
            
            return "signup"
            
+        }else{
+            return "tryagain"
         }
-    }else{
-        return"wrog"
     }
+ 
 
    })
    
