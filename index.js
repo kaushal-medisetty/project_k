@@ -4,6 +4,8 @@ const app = express();
 const { localsName, render } = require("ejs");
 const fs = require("fs");
 const multer = require("multer");
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 const dbs = require("./src/mongo_connect")
 const medapi = require("./src/api")
@@ -29,25 +31,63 @@ app.get("/api",async(req,res)=>{
     
 })
 
+app.get("/setcookie",(req,res)=>{
+  try{
+    res.cookie("sessionId","844a2b0ce474227509eb629bc56c1359")
+    res.send("Siva ")
+  }catch(e){
+    console.log(e)
+  }
+})
 
+app.get("/dashboard",(req,res)=>{
+  res.send("test1 ok")
+
+})
 
 
 app.post("/signin",async (req,res)=>{
-    
-    console.log("sigin:"+req.body.email,req.body.password)
-    let data1={
-      user:req.body.email,
-      password:req.body.password
+    try{
+      let cok = req.cookies
+      if (cok.sessionId  == "844a2b0ce474227509eb629bc56c1359"){
+        res.send("Success")
+      }
+      else {
+          
+            let data1={
+              user:req.body.email,
+              password:req.body.password
+            }
+            let val
+            val = await dbs.signin(data1);
+            
+            res.redirect(val)
+      }
+    }catch(e){
+      console.log(e)
     }
-    let val
-    val = await dbs.signin(data1);
-    res.send(val)
-   
-
-
-
-
+    // console.log("sigin:"+req.body.email,req.body.password)
+    // let data1={
+    //   user:req.body.email,
+    //   password:req.body.password
+    // }
+    // let val
+    // val = await dbs.signin(data1);
+    // res.send(val)
 })
+
+// app.post("/signin",async (req,res)=>{
+    
+//     console.log("sigin:"+req.body.email,req.body.password)
+//     let data1={
+//       user:req.body.email,
+//       password:req.body.password
+//     }
+//     let val
+//     val = await dbs.signin(data1);
+//     res.send(val)
+   
+// })
 
 app.get("/",(req,res)=>{
     res.render("signup")
