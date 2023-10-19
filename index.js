@@ -41,7 +41,7 @@ app.get("/setcookie",(req,res)=>{
 })
 
 app.get("/dashboard",(req,res)=>{
-  res.send("test1 ok")
+  res.render("nav")
 
 })
 
@@ -60,7 +60,7 @@ app.post("/signin",async (req,res)=>{
             }
             let val
             val = await dbs.signin(data1);
-            
+          
             res.redirect(val)
       }
     }catch(e){
