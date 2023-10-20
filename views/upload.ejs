@@ -1,0 +1,23 @@
+<%- include("partials/w3_head") -%>
+<body>
+    <link href="/css/upload.css" rel="stylesheet">
+
+<%- include("partials/nav") -%>
+<div class="body-container-wrapper">
+    <div class="body-container">
+      <div class="page-center">
+  
+        <i class="fa fa-cloud" aria-hidden="true"></i>
+        <h1>Upload Your <strong>Reports</strong> To HealthSync Profile</h1>
+        
+        <form id="upload" method="post" action="/reports_post" enctype="multipart/form-data">
+            <div><label>Name</label><input type="text" name="doc_name" value=""></div>
+            <div><label>Description </label><input type="text" name="description" value=""></div>
+            <input type="file" name="uploaded_file" />
+            <button type="submit">upload</button>
+        </form>
+
+</body>
+
+
+

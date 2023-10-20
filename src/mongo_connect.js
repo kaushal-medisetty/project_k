@@ -32,9 +32,19 @@ exports.signin= async (data1)=>{
 
      }   
     else if(data.email == data1.user){
-        if(data.password == data1.password ){
-           
-           return "/dashboard"
+        if(data.password == data1.password){
+            data={
+                name:data.name,
+                email:data.email,
+                phone_number:data.phone_number,
+                dod:data.dob,
+            }
+            data_return ={
+                redirect:"/dashboard",
+                data:data,
+            }
+
+           return data_return
            
         }else{
             return "tryagain"
