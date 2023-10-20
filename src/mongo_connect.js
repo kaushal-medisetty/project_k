@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-mongoose.connect('mongodb://127.0.0.1:27017/project_k');
+mongoose.connect('mongodb://root:monkroot@mongo:27017/');
 
 
 
