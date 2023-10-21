@@ -1,0 +1,81 @@
+<%- include("partials/w3_head") -%>
+<body>
+<%- include("partials/nav") -%>
+</style>
+<div class="w3-container" >
+
+  <form action="/medicines_uploder" method="get" >
+    <button type="submit" class="btn btn-primary" >Add</button>
+</form>
+  
+</div> 
+
+<!-- 
+<div class="container">
+  
+    <div class="col-md-10">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          
+          <h3 class="mb-0">jkhjhj</h3>
+          <div class="mb-1 text-body-secondary">yuyuy</div>
+          <p class="mb-auto">uiou</p>
+          <form>
+          <button type="button" class="btn btn-primary" name="delete" value="" >delete</button>
+          </form>
+          
+          <a href="" download>
+            <button type="button" class="btn btn-primary" name="delete" value="" >download</button>
+          </a>
+        </div>
+                     <div class="col-auto d-none d-lg-block">
+                        <svg class="bd-placeholder-img" width="350" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                    </div>
+     </div>
+    
+    </div>
+
+</div> -->
+<style>
+    .card {
+        margin-right: auto;
+        margin-left: auto;
+        box-shadow: 0 15px 25px rgba(18, 34, 54, 0.2);
+        border-radius: 5px;
+        backdrop-filter: blur(14px);
+        background-color: rgba(219, 221, 224, 0.2);
+        color: #20256d;
+    }
+
+
+</style>
+<div class="album py-5" >
+
+<div class="container">
+   
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <% rep.forEach((post) => {%>
+        <div class="col" >
+          
+            <div class="card shadow-sm "  style="width: 18rem; " >
+                
+                    <div class="card-body">
+                       <label>Drug</label> <h5 class="card-title"><%=post.Drug%></h5>
+                       <!-- <label>Description</label><p class="card-text">sdada</p> -->
+                       <label>date</label><p class="card-text"><%=post.data%></p>
+                       <label>time</label><p class="card-text"><%=post.report_time%></p>
+                       <form action="/alert_remove" method="post">
+                        <button type="submit" value="<%=post._id%>" name="remove">remove</button>
+                      </form>
+                    </div>
+                    
+            </div>
+            
+        </div>
+        <%});%>
+    </div>
+    
+</div>
+
+
+</body>

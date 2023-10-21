@@ -19,6 +19,9 @@ const mid = require("./src/middleware");
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// const axios = require("axios");
+
 app.get("/", (req, res) => {
   res.render("signup");
 });
@@ -26,7 +29,7 @@ app.get("/", (req, res) => {
 app.get("/api", async (req, res) => {
   let name = "Dolo-650";
   let valapi = await medapi.meddetails(name);
- 
+  console.log(valapi);
 
   await ntfy_.ntfy("ok1", "siva");
   res.json(valapi);
@@ -41,7 +44,9 @@ app.get("/null", (req, res) => {
 
 app.get("/dashboard", async (req, res) => {
   let auth1 = req.cookies["auth"];
+  // console.log("dash:" + auth1);
   let jwt_data = await dbs.checkauth(auth1);
+  // console.log(">>> checkToks >>>:" + jwt_data);
   if (jwt_data) {
     userData_dash = {
       name: jwt_data.name,
@@ -67,40 +72,12 @@ app.get("/reports", async (req, res) => {
     res.redirect("/signin");
   } else {
     let rep = await dbs.getreport(userdata.email);
-    res.render("reports",{rep:rep});
-    // for (let i = 0; i < rep.length; i++) {
-    //   console.log(">>>[reports] <<< " + rep[i].report_name);
-    //   console.log(">>>[reports] <<< " + rep[i].desc);
-    // }
+    for (let i = 0; i < rep.length; i++) {
+      console.log(">>>[reports] <<< " + rep[i].report_name);
+      console.log(">>>[reports] <<< " + rep[i].desc);
+    }
   }
-  
-});
-
-app.post("/report_del",(req,res) =>{
-  console.log(req.body.delete)
-  dbs.reports_del(req.body.delete)
-  res.redirect("/reports")
-})
-app.post("/alert_remove",(req,res) =>{
-  dbs.alert_del(req.body.remove)
-  res.redirect("/medicines")
-})
-
-app.get("/medicines",async (req, res) => {
-  let toks = req.cookies["auth"];
-  let userdata = jwt.dectoks(toks);
-  if (userdata.name == null || userdata == undefined) {
-    res.redirect("/signin");
-  } else {
-    let rep = await dbs.getalert();
-    //console.log(rep)
-    res.render("medicines",{rep:rep})
-  }
-
-});
-
-app.get("/medicines_uploder", (req, res) => {
-  res.render("medicines_uploder");
+  res.render("reports");
 });
 
 app.get("/upload", (req, res) => {
@@ -113,9 +90,13 @@ app.post("/signin", async (req, res) => {
     email: req.body.email,
     password: req.body.password,
   };
+
   let val = await dbs.signin(data1);
+
   auth = jwt.getNewtoks(val.u_email, val.u_name);
+
   res.cookie("auth", auth, { httpOnly: true });
+  console.log("signin:", val.redirect);
   res.redirect(val.redirect);
 });
 
@@ -136,16 +117,13 @@ app.post("/signup", (req, res) => {
   res.redirect("/dashboard");
 });
 
-
+var name;
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    let toks = req.cookies["auth"];
-
-    let userdata = jwt.dectoks(toks);
-    var directoryPath = "./public/data/"+userdata.email;
+    var directoryPath = "./public/data/" + name;
     if (fs.existsSync(directoryPath)) {
-      cb(null, "./public/data/"+userdata.email);
+      cb(null, "./public/data/" + name);
     } else {
       try {
         fs.mkdirSync(directoryPath);
@@ -164,48 +142,14 @@ let storage = multer.diskStorage({
 const upload1 = multer({ storage: storage });
 // let upload1  =multer({ dest: './public/data/uploads/' })
 app.post("/reports_post", upload1.single("uploaded_file"), (req, res) => {
-  
-  let toks = req.cookies["auth"];
-  let userdata = jwt.dectoks(toks);
-  if (userdata.name == null || userdata == undefined) {
-    res.redirect("/signin");
-  } else {
+  console.log(req.body.doc_name);
+  console.log(req.body.description);
+  console.log(req.file);
+  name = "uploads1/kk";
 
-  data={
-    u_email:userdata.email,
-    u_name:req.body.doc_name,
-    rep_des:req.body.description,
-    rep_name:req.file.originalname,
-    rep_dest:req.file.destination,
-  }
- 
-  dbs.up_reports(data.u_email,data.u_name,data.rep_des,data.rep_name,data.rep_dest)}
-  res.redirect("/reports")
+  //
 });
-
-// app.get("/alertm", async(req, res)=>{
-
-// })
-app.post("/alertm",(req, res)=>{
-  let toks = req.cookies["auth"];
-  let userdata = jwt.dectoks(toks);
-  if (userdata.name == null || userdata == undefined) {
-    res.redirect("/signin");
-  } else {
-  data={
-    email:userdata.email,
-    drug:req.body.doc_name1,
-    desc:req.body.description1,
-    time:req.body.time,
-    date:req.body.date,
-  }
-  dbs.up_alert(data.email,data.drug,data.desc,data.time,data.date)
-  
-}
-res.redirect("/medicines")
-})
 
 app.listen(3000, function (req, res) {
   console.log("server is up");
 });
-
