@@ -154,3 +154,5 @@ app.post("/reports_post", upload1.single("uploaded_file"), (req, res) => {
 app.listen(3000, function (req, res) {
   console.log("server is up");
 });
+
+console.log("Fucked ups ");
