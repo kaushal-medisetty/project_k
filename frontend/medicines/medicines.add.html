@@ -2,7 +2,7 @@
 <html>
 <title>HealthSync - Reports</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="uploadstyle.css">
+<link rel="stylesheet" href="../upload_rep/uploadstyle.css">
 <body>
 
 <div class="header-container-wrapper">
@@ -28,12 +28,20 @@
        
   
         
+      
+<form action="/action_page.php">
+    
+  </form>
+  
+      
         <i class="fa fa-cloud" aria-hidden="true"></i>
-        <h1>Upload Your <strong>Reports</strong> To HealthSync Profile</h1>
-<b><h4><div><label>Name</label> <br><input type="text" name="doc_name" value=""></div>
-<div><label>Description </label> <br><input type="text" name="description" value=""></div><br></b><br>
-
-        <a class="upload" id="call-to-action"><span>Select Your Reports</span></a>
+        <h1>Add Your <strong>Medicines</strong> To HealthSync Profile</h1><b>
+<div><label><h4>Name Of Drug</label> <br><input type="text" name="doc_name" value=""></div>
+<div><label>Description</label><br><input type="text" name="description" value=""><br>
+    <br><label for="appt">Select a Time:</label><br></div>
+    <input type="time" id="appt" name="appt"></h4>
+   <br>
+       <br><br> <a class="upload" id="call-to-action"><span>Submit</span></a>
         <form id="upload" method="post" action="upload.php" enctype="multipart/form-data">
           <div id="drop">
         <input type="file" name="upl" multiple  multiple class="upload-hidden">

@@ -30,7 +30,9 @@ exports.getreport = async (u_email) => {
   return report;
 };
 
-exports.up_reports = async (u_email, rep_name, rep_des) => {};
+exports.up_reports = async (u_email, rep_name, rep_des) => {
+  // const
+};
 
 exports.signup = async (data) => {
   const newperson = new signup(data);

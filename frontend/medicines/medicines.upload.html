@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<title>HealthSync - Medicines</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<body>
+
+<div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
+  <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Close &times;</button>
+  <a href="#" class="w3-bar-item w3-button">Profile</a>
+  <a href="#" class="w3-bar-item w3-button">Medications</a>
+  <a href="#" class="w3-bar-item w3-button">Reports</a>
+  <a href="#" class="w3-bar-item w3-button">Doctor Appointments</a>
+</div>
+
+
+<style>
+    #nav{
+        background-color: #87bdd8;
+    }
+    .center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+
+}
+.document{
+    margin: 10px;
+    display: flex;
+  justify-content: center;
+  align-items:center ;
+  height: 80px;
+ 
+
+}
+.document-info-container {
+            display: block;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid green;
+            margin: 10px;
+        }
+
+
+    </style>
+<div class="w3-container" >
+  <button class="w3-button w3-xlarge w3-left" onclick="openLeftMenu()">&#9776;</button>
+  <h1 id="nav"><img src="../../public/img_src/logo.jpg" height="65px" width="100 px"></h1>
+
+  <div class="center">
+    <button type="button" class="btn btn-primary">Add Medicine</button>
+  </div>
+</div> 
+
+<!-- <div class="document-info-container">
+    <div class="document-name"> <label>Document Name : </label> <p id="docname"></p> </div>
+    <div class="document-date"><label>Date : </label> <p id="dated"></p> </div>
+    <button class="view-button">View</button>
+
+</div> -->
+<div class="container">
+<div class="col-md-10">
+  <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+    <div class="col p-4 d-flex flex-column position-static">
+      
+      <h3 class="mb-0">Name</h3>
+      <div class="mb-1 text-body-secondary">Data:23123123</div>
+      <p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+      <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+        View
+        <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
+      </a>
+    </div>
+    <div class="col-auto d-none d-lg-block">
+      <svg class="bd-placeholder-img" width="350" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+
+<script>
+function openLeftMenu() {
+  document.getElementById("leftMenu").style.display = "block";
+}
+
+function closeLeftMenu() {
+  document.getElementById("leftMenu").style.display = "none";
+}
+
+
+</script>
+     
+</body>
+</html>
