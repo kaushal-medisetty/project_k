@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
 
+const jwt = require("./src/jwt.js")
 const dbs = require("./src/mongo_connect")
 const medapi = require("./src/api")
 const st = require("./src/stroage")
@@ -41,13 +42,30 @@ app.get("/api",async(req,res)=>{
 app.get("/signin",(req,res)=>{
   res.render("signin")
 })
-
-app.get("/dashboard",(req,res)=>{
-  var gg= req.cookies["context"];
-  res.clearCookie("context", { httpOnly: true });
-  res.render("dashboard",{data:gg})
-
+app.get("/null",(req,res)=>{
+  res.send("Null")
 })
+
+
+app.get("/dashboard", async (req, res) => {
+  let auth1 = req.cookies["auth"];
+  console.log("dash:"+auth1)
+  let jwt1 = await dbs.checkauth(auth1);
+  console.log("ss:"+jwt1) 
+  if (jwt1) {
+    gg={
+      name:"all"
+    }
+    res.render("dashboard", { data: gg });
+  }
+  else{
+    gg={
+      name:"not all"
+    }
+    res.render("dashboard", { data: gg });
+  }
+});
+
 app.get("/tryagain",(req,res)=>{
   res.send("wrong password")
 
@@ -77,13 +95,16 @@ app.post("/signin",async (req,res)=>{
 
 
             let data1={
-              user:req.body.email,
+              email:req.body.email,
               password:req.body.password
             }
             let val
             val = await dbs.signin(data1);
-
-            res.cookie("context", val.data, { httpOnly: true });
+       
+            auth=jwt.getNewtoks(val.email,data1.password)
+            
+            res.cookie("auth", auth, { httpOnly: true });
+            console.log("signin:",val.redirect)
             res.redirect(val.redirect)
       
   
@@ -102,10 +123,24 @@ app.post("/signup",(req,res)=>{
       dob:req.body.dob,
       password:req.body.password
     }
+    // let data1 ={
+    //   name:req.body.name,
+    //   email:req.body.email,
+    //   phone_number:req.body.phone,
+    //   gender:req.body.gender,
+    //   dob:req.body.dob,
+      
+    // }
     dbs.signup(data)
-    //hash
-    //cookie
-    res.redirect("/")
+    auth=jwt.getNewtoks(data.name,data.password)
+    // auth={
+    //   email:req.body.email,
+    //    jwt:auth,
+    // }
+    // dbs.auth(auth)
+    res.cookie("auth", auth, { httpOnly: true });
+    // res.cookie("context", data1, { httpOnly: true });
+    res.redirect("/dashboard")
 })
 
 
