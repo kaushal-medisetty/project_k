@@ -30,8 +30,18 @@ exports.getreport = async (u_email) => {
   return report;
 };
 
-exports.up_reports = async (u_email, rep_name, rep_des) => {
-  // const
+exports.up_reports = async (u_name, u_email, rep_name, rep_des) => {
+  //(username , user_email, report name , report Desc)
+  const N_report = {
+    email: u_email,
+    name: u_name,
+    desc: rep_des,
+    report_name: rep_name,
+    data: Date.now(),
+  };
+  let rport = new reports(N_report);
+  await rport.save();
+  return true;
 };
 
 exports.signup = async (data) => {
