@@ -12,7 +12,7 @@ const jwt = require("./src/jwt.js");
 const dbs = require("./src/mongo_connect");
 const medapi = require("./src/api");
 const st = require("./src/stroage");
-const ntfy_ = require("./src/ntfy");
+const ntfy = require("./src/ntfy");
 const mid = require("./src/middleware");
 const shed = require("./src/scheduler");
 const { log } = require("console");
@@ -25,13 +25,13 @@ app.get("/", (req, res) => {
   res.render("signup");
 });
 
-app.get("/api", async (req, res) => {
-  let name = "Dolo-650";
-  let valapi = await medapi.meddetails(name);
+// app.get("/api", async (req, res) => {
+//   let name = "Dolo-650";
+//   let valapi = await medapi.meddetails(name);
 
-  await ntfy_.ntfy("ok1", "siva");
-  res.json(valapi);
-});
+//   await ntfy.ntfy("ok1", "siva");
+//   res.json(valapi);
+// });
 
 app.get("/signin", (req, res) => {
   res.render("signin");
@@ -39,10 +39,6 @@ app.get("/signin", (req, res) => {
 app.get("/null", (req, res) => {
   res.send("Null");
 });
-
-// app.post("/shedulemeds" async(req,res) => {
-//   let auth =
-// })
 
 app.get("/dashboard", async (req, res) => {
   let auth1 = req.cookies["auth"];
@@ -73,10 +69,6 @@ app.get("/reports", async (req, res) => {
   } else {
     let rep = await dbs.getreport(userdata.email);
     res.render("reports", { rep: rep });
-    // for (let i = 0; i < rep.length; i++) {
-    //   console.log(">>>[reports] <<< " + rep[i].report_name);
-    //   console.log(">>>[reports] <<< " + rep[i].desc);
-    // }
   }
 });
 
@@ -190,7 +182,10 @@ app.post("/reports_post", upload1.single("uploaded_file"), (req, res) => {
 });
 
 // app.get("/alertm", async(req, res)=>{
-
+app.get("/trigger", (req, res) => {
+  ntfy.ntfy("Working");
+  res.redirect("./sigin");
+});
 // })
 app.post("/alertm", async (req, res) => {
   let toks = req.cookies["auth"];
