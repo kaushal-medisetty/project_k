@@ -1,0 +1,54 @@
+<%- include("partials/w3_head") -%>
+<body>
+<%- include("partials/nav") -%>
+</style>
+<div class="w3-container" >
+
+  <form action="/appoiment_up" method="get" >
+    <button type="submit" class="btn btn-primary" >Add</button>
+</form>
+  
+</div> 
+
+<style>
+    .card {
+        margin-right: auto;
+        margin-left: auto;
+        box-shadow: 0 15px 25px rgba(18, 34, 54, 0.2);
+        border-radius: 5px;
+        backdrop-filter: blur(14px);
+        background-color: rgba(219, 221, 224, 0.2);
+        color: #20256d;
+    }
+
+
+</style>
+<div class="album py-5" >
+
+<div class="container">
+   
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <% rep.forEach((post) => {%>
+            <div class="col" >
+              
+                <div class="card shadow-sm "  style="width: 18rem; " >
+                    
+                        <div class="card-body">
+                           <label>Doc name</label> <h5 class="card-title"><%=post.Drug%></h5>
+                           <label>Description</label><p class="card-text">sdada</p>
+                           <label>time</label><p class="card-text"><%=post.report_time%></p>
+                           <form action="/alert_remove" method="post">
+                            <button type="submit" value="<%=post._id%>" name="remove" value="" >remove</button>
+                          </form>
+                        </div>
+                        
+                </div>
+                
+            </div>
+            <%});%>
+    </div>
+    
+</div>
+
+
+</body>

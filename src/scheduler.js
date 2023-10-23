@@ -2,7 +2,7 @@ const schedule = require("node-schedule");
 const ntfy = require("./ntfy");
 let job = [];
 
-exports.scheduler = (val, remhr) => {
+exports.scheduler = (val, remhr,name,desc) => {
   remhr = remhr.toString();
   remhr = remhr.split(":");
   console.log(`Sheduled for time ${remhr}`);
@@ -15,10 +15,22 @@ exports.scheduler = (val, remhr) => {
       `>>> Scheduled for : + ${remhr[0].toString()}.${remhr[1].toString()} `
     );
     ntfy.ntfy(
-      "matter siva  :  Siva Sucks!!! vanthu matter padam link anpu :D !!",
-      "siva"
+      desc,
+      name
     );
   });
+};
+
+let appm = [];
+
+exports.apposhed = (val,apptim, docName,name) => {
+  appm[val] = new schedule.scheduleJob(apptim, () => {
+    console.log(`>>> app set For Doctor ${docName}  For time ${apptim}`);
+  });
+  ntfy.ntfy(
+    docName,
+    name
+  );
 };
 
 exports.canshed = (val) => {

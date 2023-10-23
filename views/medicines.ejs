@@ -10,32 +10,6 @@
   
 </div> 
 
-<!-- 
-<div class="container">
-  
-    <div class="col-md-10">
-      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static">
-          
-          <h3 class="mb-0">jkhjhj</h3>
-          <div class="mb-1 text-body-secondary">yuyuy</div>
-          <p class="mb-auto">uiou</p>
-          <form>
-          <button type="button" class="btn btn-primary" name="delete" value="" >delete</button>
-          </form>
-          
-          <a href="" download>
-            <button type="button" class="btn btn-primary" name="delete" value="" >download</button>
-          </a>
-        </div>
-                     <div class="col-auto d-none d-lg-block">
-                        <svg class="bd-placeholder-img" width="350" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-                    </div>
-     </div>
-    
-    </div>
-
-</div> -->
 <style>
     .card {
         margin-right: auto;
@@ -60,12 +34,11 @@
             <div class="card shadow-sm "  style="width: 18rem; " >
                 
                     <div class="card-body">
-                       <label>Drug</label> <h5 class="card-title"><%=post.Drug%></h5>
-                       <!-- <label>Description</label><p class="card-text">sdada</p> -->
-                       <label>date</label><p class="card-text"><%=post.data%></p>
+                       <label>Drug</label> <h5 class="card-title"><%=post.Doc_name%></h5>
+                       <label>Description</label><p class="card-text">sdada</p>
                        <label>time</label><p class="card-text"><%=post.report_time%></p>
                        <form action="/alert_remove" method="post">
-                        <button type="submit" value="<%=post._id%>" name="remove">remove</button>
+                        <button type="submit" value="<%=post._id%>" name="remove" value="" >remove</button>
                       </form>
                     </div>
                     
