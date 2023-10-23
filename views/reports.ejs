@@ -1,0 +1,44 @@
+<%- include("partials/w3_head") -%>
+<body>
+<%- include("partials/nav") -%>
+</style>
+<div class="w3-container" >
+
+  <form action="/upload" method="get" >
+    <button type="submit" class="btn btn-primary" >Upload</button>
+</form>
+  
+</div> 
+
+<% rep.forEach((post) => {%>
+<div class="container">
+  
+    <div class="col-md-10">
+      <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          
+          <h3 class="mb-0"><%=post.name %></h3>
+          <div class="mb-1 text-body-secondary"><%=post.data %></div>
+          <p class="mb-auto"><%=post.desc%></p>
+          <form action="/report_del" method="post">
+          <button type="submit" class="btn btn-primary" name="delete" value= "<%=post._id %>">delete</button>
+        
+        <% var str=post.dest+"/"+post.report_name %>
+        
+          <a href="/public/data/sdasd/index.js-1697880302890-646885029" download>
+            download
+          </a>
+        </form>
+        </div>
+                     <div class="col-auto d-none d-lg-block">
+                      <img width="200" height="200" src="https://img.icons8.com/cute-clipart/256/document.png" alt="document"/>
+                    </div>
+     </div>
+    
+    </div>
+
+</div>
+<%});%>
+
+
+</body>
