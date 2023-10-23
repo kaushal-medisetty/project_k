@@ -42,18 +42,23 @@ app.get("/null", (req, res) => {
 
 app.get("/dashboard", async (req, res) => {
   let auth1 = req.cookies["auth"];
-  let jwt_data = await dbs.checkauth(auth1);
-  if (jwt_data) {
-    userData_dash = {
-      name: jwt_data.name,
-      email: jwt_data.email,
-    };
-    res.render("dashboard", { data: userData_dash });
+  if (!auth1) {
+    console.log("Cumming check!!");
+    res.redirect("./signin");
   } else {
-    userData_dash = {
-      name: "not all",
-    };
-    res.render("dashboard", { data: userData_dash });
+    let jwt_data = await dbs.checkauth(auth1);
+    if (jwt_data) {
+      userData_dash = {
+        name: jwt_data.name,
+        email: jwt_data.email,
+      };
+      res.render("dashboard", { data: userData_dash });
+    } else {
+      userData_dash = {
+        name: "not all",
+      };
+      res.render("dashboard", { data: userData_dash });
+    }
   }
 });
 
@@ -63,12 +68,16 @@ app.get("/tryagain", (req, res) => {
 
 app.get("/reports", async (req, res) => {
   let toks = req.cookies["auth"];
-  let userdata = jwt.dectoks(toks);
-  if (userdata.name == null || userdata == undefined) {
-    res.redirect("/signin");
+  if (!toks) {
+    res.redirect("./signin");
   } else {
-    let rep = await dbs.getreport(userdata.email);
-    res.render("reports", { rep: rep });
+    let userdata = jwt.dectoks(toks);
+    if (userdata.name == null || userdata == undefined) {
+      res.redirect("/signin");
+    } else {
+      let rep = await dbs.getreport(userdata.email);
+      res.render("reports", { rep: rep });
+    }
   }
 });
 
@@ -84,13 +93,17 @@ app.post("/alert_remove", (req, res) => {
 
 app.get("/medicines", async (req, res) => {
   let toks = req.cookies["auth"];
-  let userdata = jwt.dectoks(toks);
-  if (userdata.name == null || userdata == undefined) {
-    res.redirect("/signin");
+  if (!toks) {
+    res.redirect("./signin");
   } else {
-    let rep = await dbs.getalert(userdata.email);
-    //console.log(rep)med
-    res.render("medicines", { rep: rep });
+    let userdata = jwt.dectoks(toks);
+    if (userdata.name == null || userdata == undefined) {
+      res.redirect("/signin");
+    } else {
+      let rep = await dbs.getalert(userdata.email);
+      //console.log(rep)med
+      res.render("medicines", { rep: rep });
+    }
   }
 });
 
@@ -134,18 +147,21 @@ app.post("/signup", (req, res) => {
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let toks = req.cookies["auth"];
-
-    let userdata = jwt.dectoks(toks);
-    var directoryPath = "./public/data/" + userdata.email;
-    if (fs.existsSync(directoryPath)) {
-      cb(null, "./public/data/" + userdata.email);
+    if (!toks) {
+      res.redirect("./signin");
     } else {
-      try {
-        fs.mkdirSync(directoryPath);
-        console.log("Directory created successfully");
-        cb(null, directoryPath);
-      } catch (error) {
-        console.error("Error creating directory:", error);
+      let userdata = jwt.dectoks(toks);
+      var directoryPath = "./public/data/" + userdata.email;
+      if (fs.existsSync(directoryPath)) {
+        cb(null, "./public/data/" + userdata.email);
+      } else {
+        try {
+          fs.mkdirSync(directoryPath);
+          console.log("Directory created successfully");
+          cb(null, directoryPath);
+        } catch (error) {
+          console.error("Error creating directory:", error);
+        }
       }
     }
   },
@@ -158,27 +174,31 @@ const upload1 = multer({ storage: storage });
 // let upload1  =multer({ dest: './public/data/uploads/' })
 app.post("/reports_post", upload1.single("uploaded_file"), (req, res) => {
   let toks = req.cookies["auth"];
-  let userdata = jwt.dectoks(toks);
-  if (userdata.name == null || userdata == undefined) {
-    res.redirect("/signin");
+  if (!toks) {
+    res.redirect("./signin");
   } else {
-    data = {
-      u_email: userdata.email,
-      u_name: req.body.doc_name,
-      rep_des: req.body.description,
-      rep_name: req.file.originalname,
-      rep_dest: req.file.destination,
-    };
+    let userdata = jwt.dectoks(toks);
+    if (userdata.name == null || userdata == undefined) {
+      res.redirect("/signin");
+    } else {
+      data = {
+        u_email: userdata.email,
+        u_name: req.body.doc_name,
+        rep_des: req.body.description,
+        rep_name: req.file.originalname,
+        rep_dest: req.file.destination,
+      };
 
-    dbs.up_reports(
-      data.u_email,
-      data.u_name,
-      data.rep_des,
-      data.rep_name,
-      data.rep_dest
-    );
+      dbs.up_reports(
+        data.u_email,
+        data.u_name,
+        data.rep_des,
+        data.rep_name,
+        data.rep_dest
+      );
+      res.redirect("/reports");
+    }
   }
-  res.redirect("/reports");
 });
 
 // app.get("/alertm", async(req, res)=>{
@@ -189,33 +209,37 @@ app.get("/trigger", (req, res) => {
 // })
 app.post("/alertm", async (req, res) => {
   let toks = req.cookies["auth"];
-  let userdata = jwt.dectoks(toks);
-  if (userdata.name == null || userdata == undefined) {
-    res.redirect("/signin");
+  if (!toks) {
+    res.redirect("./signin");
   } else {
-    data = {
-      email: userdata.email,
-      drug: req.body.doc_name1,
-      desc: req.body.description1,
-      time: req.body.time,
-      date: req.body.date,
-    };
-    let lstva = await dbs.getlastrec();
-    console.log(">>lstva : " + lstva);
-    if (!lstva) lstva = 0;
-    // lstva = ;
-    lstva += 1;
-    await dbs.up_alert(
-      data.email,
-      data.drug,
-      data.desc,
-      data.time,
-      data.date,
-      lstva
-    );
-    shed.scheduler(lstva, data.time);
+    let userdata = jwt.dectoks(toks);
+    if (userdata.name == null || userdata == undefined) {
+      res.redirect("/signin");
+    } else {
+      data = {
+        email: userdata.email,
+        drug: req.body.doc_name1,
+        desc: req.body.description1,
+        time: req.body.time,
+        date: req.body.date,
+      };
+      let lstva = await dbs.getlastrec();
+      console.log(">>lstva : " + lstva);
+      if (!lstva) lstva = 0;
+      // lstva = ;
+      lstva += 1;
+      await dbs.up_alert(
+        data.email,
+        data.drug,
+        data.desc,
+        data.time,
+        data.date,
+        lstva
+      );
+      shed.scheduler(lstva, data.time);
+    }
+    res.redirect("/medicines");
   }
-  res.redirect("/medicines");
 });
 
 app.post("/cancelalrt", async (req, res) => {
