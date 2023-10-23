@@ -14,6 +14,8 @@ const medapi = require("./src/api");
 const st = require("./src/stroage");
 const ntfy_ = require("./src/ntfy");
 const mid = require("./src/middleware");
+const shed = require("./src/scheduler");
+const { log } = require("console");
 // var encrypt = require('mongoose-encryption');
 
 app.set("view engine", "ejs");
@@ -26,7 +28,6 @@ app.get("/", (req, res) => {
 app.get("/api", async (req, res) => {
   let name = "Dolo-650";
   let valapi = await medapi.meddetails(name);
- 
 
   await ntfy_.ntfy("ok1", "siva");
   res.json(valapi);
@@ -38,6 +39,10 @@ app.get("/signin", (req, res) => {
 app.get("/null", (req, res) => {
   res.send("Null");
 });
+
+// app.post("/shedulemeds" async(req,res) => {
+//   let auth =
+// })
 
 app.get("/dashboard", async (req, res) => {
   let auth1 = req.cookies["auth"];
@@ -67,36 +72,34 @@ app.get("/reports", async (req, res) => {
     res.redirect("/signin");
   } else {
     let rep = await dbs.getreport(userdata.email);
-    res.render("reports",{rep:rep});
+    res.render("reports", { rep: rep });
     // for (let i = 0; i < rep.length; i++) {
     //   console.log(">>>[reports] <<< " + rep[i].report_name);
     //   console.log(">>>[reports] <<< " + rep[i].desc);
     // }
   }
-  
 });
 
-app.post("/report_del",(req,res) =>{
-  console.log(req.body.delete)
-  dbs.reports_del(req.body.delete)
-  res.redirect("/reports")
-})
-app.post("/alert_remove",(req,res) =>{
-  dbs.alert_del(req.body.remove)
-  res.redirect("/medicines")
-})
+app.post("/report_del", (req, res) => {
+  console.log(req.body.delete);
+  dbs.reports_del(req.body.delete);
+  res.redirect("/reports");
+});
+app.post("/alert_remove", (req, res) => {
+  dbs.alert_del(req.body.remove);
+  res.redirect("/medicines");
+});
 
-app.get("/medicines",async (req, res) => {
+app.get("/medicines", async (req, res) => {
   let toks = req.cookies["auth"];
   let userdata = jwt.dectoks(toks);
   if (userdata.name == null || userdata == undefined) {
     res.redirect("/signin");
   } else {
-    let rep = await dbs.getalert();
-    //console.log(rep)
-    res.render("medicines",{rep:rep})
+    let rep = await dbs.getalert(userdata.email);
+    //console.log(rep)med
+    res.render("medicines", { rep: rep });
   }
-
 });
 
 app.get("/medicines_uploder", (req, res) => {
@@ -136,16 +139,14 @@ app.post("/signup", (req, res) => {
   res.redirect("/dashboard");
 });
 
-
-
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let toks = req.cookies["auth"];
 
     let userdata = jwt.dectoks(toks);
-    var directoryPath = "./public/data/"+userdata.email;
+    var directoryPath = "./public/data/" + userdata.email;
     if (fs.existsSync(directoryPath)) {
-      cb(null, "./public/data/"+userdata.email);
+      cb(null, "./public/data/" + userdata.email);
     } else {
       try {
         fs.mkdirSync(directoryPath);
@@ -164,48 +165,70 @@ let storage = multer.diskStorage({
 const upload1 = multer({ storage: storage });
 // let upload1  =multer({ dest: './public/data/uploads/' })
 app.post("/reports_post", upload1.single("uploaded_file"), (req, res) => {
-  
   let toks = req.cookies["auth"];
   let userdata = jwt.dectoks(toks);
   if (userdata.name == null || userdata == undefined) {
     res.redirect("/signin");
   } else {
+    data = {
+      u_email: userdata.email,
+      u_name: req.body.doc_name,
+      rep_des: req.body.description,
+      rep_name: req.file.originalname,
+      rep_dest: req.file.destination,
+    };
 
-  data={
-    u_email:userdata.email,
-    u_name:req.body.doc_name,
-    rep_des:req.body.description,
-    rep_name:req.file.originalname,
-    rep_dest:req.file.destination,
+    dbs.up_reports(
+      data.u_email,
+      data.u_name,
+      data.rep_des,
+      data.rep_name,
+      data.rep_dest
+    );
   }
- 
-  dbs.up_reports(data.u_email,data.u_name,data.rep_des,data.rep_name,data.rep_dest)}
-  res.redirect("/reports")
+  res.redirect("/reports");
 });
 
 // app.get("/alertm", async(req, res)=>{
 
 // })
-app.post("/alertm",(req, res)=>{
+app.post("/alertm", async (req, res) => {
   let toks = req.cookies["auth"];
   let userdata = jwt.dectoks(toks);
   if (userdata.name == null || userdata == undefined) {
     res.redirect("/signin");
   } else {
-  data={
-    email:userdata.email,
-    drug:req.body.doc_name1,
-    desc:req.body.description1,
-    time:req.body.time,
-    date:req.body.date,
+    data = {
+      email: userdata.email,
+      drug: req.body.doc_name1,
+      desc: req.body.description1,
+      time: req.body.time,
+      date: req.body.date,
+    };
+    let lstva = await dbs.getlastrec();
+    console.log(">>lstva : " + lstva);
+    if (!lstva) lstva = 0;
+    // lstva = ;
+    lstva += 1;
+    await dbs.up_alert(
+      data.email,
+      data.drug,
+      data.desc,
+      data.time,
+      data.date,
+      lstva
+    );
+    shed.scheduler(lstva, data.time);
   }
-  dbs.up_alert(data.email,data.drug,data.desc,data.time,data.date)
-  
-}
-res.redirect("/medicines")
-})
+  res.redirect("/medicines");
+});
+
+app.post("/cancelalrt", async (req, res) => {
+  let canval = req.body.calval;
+  shed.canshed(canval);
+  res.redirect("/medicines");
+});
 
 app.listen(3000, function (req, res) {
   console.log("server is up");
 });
-
