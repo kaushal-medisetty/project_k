@@ -1,4 +1,4 @@
-exports.makedataTime = (data, time) => {
+exports.makedataTime = (date, time) => {
   date = date.toString();
   time = time.toString();
   date = date.split("T");
