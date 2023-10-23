@@ -181,10 +181,18 @@ exports.getalert = async (user) => {
 exports.getlastrec = async () => {
   const lst = await alert.findOne({}).sort({ _id: -1 }).limit(1);
   console.log(lst);
-
-  return lst.alertNo;
+  let lstval;
+  try {
+    if (!lst.alertNo || !lst) {
+      lstval = 0;
+    } else {
+      lstval = lst.alertNo;
+    }
+  } catch (error) {
+    lstval = 0;
+  }
+  return lstval;
 };
-
 
 exports.alert_del = async (id) => {
   alert.deleteOne({ _id: id }).then(function () {
@@ -237,9 +245,19 @@ exports.getapp = async (user) => {
 
 
 exports.getlastrec1 = async () => {
-  const lst = await app.findOne({}).sort({ _id: -1 }).limit(1);
+  const lst = await alert.findOne({}).sort({ _id: -1 }).limit(1);
   console.log(lst);
-  return lst.alertNo;
+  let lstval;
+  try {
+    if (!lst.alertNo || !lst) {
+      lstval = 0;
+    } else {
+      lstval = lst.alertNo;
+    }
+  } catch (error) {
+    lstval = 0;
+  }
+  return lstval;
 };
 
 
