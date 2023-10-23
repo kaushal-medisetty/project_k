@@ -17,11 +17,9 @@ const mid = require("./src/middleware");
 const shed = require("./src/scheduler");
 const { log } = require("console");
 
-
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -51,7 +49,6 @@ let storage = multer.diskStorage({
 });
 const upload1 = multer({ storage: storage });
 
-
 app.get("/", (req, res) => {
   res.render("signup");
 });
@@ -63,10 +60,6 @@ app.get("/", (req, res) => {
 //   await ntfy.ntfy("ok1", "siva");
 //   res.json(valapi);
 // });
-
-
-
-
 
 app.get("/signin", (req, res) => {
   res.render("signin");
@@ -82,7 +75,6 @@ app.post("/signin", async (req, res) => {
   res.cookie("auth", auth, { httpOnly: true });
   res.redirect(val.redirect);
 });
-
 
 app.get("/signup", (req, res) => {
   res.render("signup");
@@ -103,7 +95,6 @@ app.post("/signup", (req, res) => {
   res.cookie("auth", auth, { httpOnly: true });
   res.redirect("/dashboard");
 });
-
 
 app.get("/dashboard", async (req, res) => {
   let auth1 = req.cookies["auth"];
@@ -126,7 +117,6 @@ app.get("/dashboard", async (req, res) => {
     }
   }
 });
-
 
 app.post("/reports_post", upload1.single("uploaded_file"), (req, res) => {
   let toks = req.cookies["auth"];
@@ -157,7 +147,6 @@ app.post("/reports_post", upload1.single("uploaded_file"), (req, res) => {
   }
 });
 
-
 app.get("/reports", async (req, res) => {
   let toks = req.cookies["auth"];
   if (!toks) {
@@ -178,8 +167,6 @@ app.post("/report_del", (req, res) => {
   dbs.reports_del(req.body.delete);
   res.redirect("/reports");
 });
-
-
 
 app.get("/upload", (req, res) => {
   res.render("upload");
@@ -224,7 +211,7 @@ app.post("/alertm", async (req, res) => {
       let lstva = await dbs.getlastrec();
       console.log(">>lstva : " + lstva);
       if (!lstva) lstva = 0;
-      
+
       lstva += 1;
       await dbs.up_alert(
         data.email,
@@ -234,7 +221,7 @@ app.post("/alertm", async (req, res) => {
         data.date,
         lstva
       );
-      shed.scheduler(lstva, data.time,userdata.name,data.desc);
+      shed.scheduler(lstva, data.time, userdata.name, data.desc);
     }
     res.redirect("/medicines");
   }
@@ -245,7 +232,10 @@ app.post("/alert_remove", (req, res) => {
   res.redirect("/medicines");
 });
 
-
+app.post("/app_remove", (req, res) => {
+  dbs.app_del(req.body.remove);
+  res.redirect("/appoiment");
+});
 
 app.get("/appoiment", async (req, res) => {
   let toks = req.cookies["auth"];
@@ -261,8 +251,6 @@ app.get("/appoiment", async (req, res) => {
     }
   }
 });
-
-
 
 app.post("/alerta", async (req, res) => {
   let toks = req.cookies["auth"];
@@ -283,7 +271,7 @@ app.post("/alerta", async (req, res) => {
       let lstva = await dbs.getlastrec1();
       console.log(">>lstva : " + lstva);
       if (!lstva) lstva = 0;
-      
+
       lstva += 1;
       await dbs.up_app(
         data.email,
@@ -293,36 +281,25 @@ app.post("/alerta", async (req, res) => {
         data.date,
         lstva
       );
-      shed.apposhed(lstva, data.time,data.Doc_name,userdata.name);
+      shed.apposhed(lstva, data.time, data.Doc_name, userdata.name);
     }
     res.redirect("/appoiment");
   }
 });
 
-
-
-
-
-
 app.get("/appoiment_up", (req, res) => {
   res.render("appoiment_up");
 });
-
 
 app.post("/appoiment", (req, res) => {
   dbs.app_del(req.body.remove);
   res.redirect("/appoiment");
 });
 
-
-
-
 app.get("/trigger", (req, res) => {
   ntfy.ntfy("Working");
   res.redirect("./sigin");
 });
-
-
 
 app.post("/cancelalrt", async (req, res) => {
   let canval = req.body.calval;
@@ -333,4 +310,3 @@ app.post("/cancelalrt", async (req, res) => {
 app.listen(3000, function (req, res) {
   console.log("server is up");
 });
-
