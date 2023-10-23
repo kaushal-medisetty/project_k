@@ -1,8 +1,6 @@
-const shell = require('shelljs');
+const shell = require("shelljs");
 
-
-
-exports.ntfy=async(message,topic1)=>{
-    let ntfy=`curl -d ${message} http://ntfy.sivahomelab.online/${topic1}`
-    shell.exec(ntfy)
-    }
+exports.ntfy = async (message, topic) => {
+  let ntfy = `curl -d ${message} http://ntfy.sivahomelab.online/${topic}`;
+  shell.exec(ntfy);
+};
