@@ -16,6 +16,7 @@ const ntfy = require("./src/ntfy");
 const mid = require("./src/middleware");
 const shed = require("./src/scheduler");
 const { log } = require("console");
+const fun = require("./src/fucntions");
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -281,7 +282,8 @@ app.post("/alerta", async (req, res) => {
         data.date,
         lstva
       );
-      shed.apposhed(lstva, data.time, data.Doc_name, userdata.name);
+      let fulltime = fun.makedataTime(data.date, data.time);
+      shed.apposhed(lstva, fulltime, data.Doc_name, userdata.name);
     }
     res.redirect("/appoiment");
   }

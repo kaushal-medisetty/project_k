@@ -2,7 +2,7 @@ const schedule = require("node-schedule");
 const ntfy = require("./ntfy");
 let job = [];
 
-exports.scheduler = (val, remhr,name,desc) => {
+exports.scheduler = (val, remhr, name, desc) => {
   remhr = remhr.toString();
   remhr = remhr.split(":");
   console.log(`Sheduled for time ${remhr}`);
@@ -14,23 +14,18 @@ exports.scheduler = (val, remhr,name,desc) => {
     console.log(
       `>>> Scheduled for : + ${remhr[0].toString()}.${remhr[1].toString()} `
     );
-    ntfy.ntfy(
-      desc,
-      name
-    );
+    ntfy.ntfy(desc, name);
   });
 };
 
 let appm = [];
 
-exports.apposhed = (val,apptim, docName,name) => {
+exports.apposhed = (val, apptim, docName, name) => {
+  apptim = apptim.toString();
   appm[val] = new schedule.scheduleJob(apptim, () => {
     console.log(`>>> app set For Doctor ${docName}  For time ${apptim}`);
   });
-  ntfy.ntfy(
-    docName,
-    name
-  );
+  ntfy.ntfy(docName, name);
 };
 
 exports.canshed = (val) => {
