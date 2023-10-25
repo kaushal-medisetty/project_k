@@ -1,7 +1,8 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            background-color: #328f8a;
+            background-image: linear-gradient(to bottom, #0077be, #00a0e9);
             margin: 0;
             padding: 0;
         }
@@ -52,4 +53,4 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
-   
+       

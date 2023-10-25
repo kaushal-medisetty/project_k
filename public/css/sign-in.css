@@ -1,6 +1,8 @@
 html,
 body {
   height: 100%;
+  background-color: #328f8a;
+  background-image: linear-gradient(to bottom, #0077be, #00a0e9);
 }
 
 .form-signin {

@@ -1,18 +1,18 @@
 
-    <div class="w3-sidebar w3-bar-block w3-card w3-animate-left" style="display:none" id="leftMenu">
-      <button onclick="closeLeftMenu()" class="w3-bar-item w3-button w3-large">Close &times;</button>
-      <a href="#" class="w3-bar-item w3-button">Profile</a>
-      <a href="/medicines" class="w3-bar-item w3-button">Medications</a>
-      <a href="/reports" class="w3-bar-item w3-button">Reports</a>
-      <a href="/appoiment" class="w3-bar-item w3-button">Doctor Appointments</a>
-    </div>
-    <link href="css/nav.css" rel="stylesheet ">
-   
-    <div class="w3-container" >
-      <button class="w3-button w3-xlarge w3-left" onclick="openLeftMenu()">&#9776;</button>
-      <h1 id="nav"><img src="/img_src/logo.jpg" height="65px" width="100 px"></h1>
-    </div>
-
-    <script src="/js/nav.js" ></script> 
-    
-         
+<nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+  <a href="/dashboard" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+      <h1 class="m-0 text-primary">HealthSync</h1>
+  </a>
+  <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="navbar-nav ms-auto p-4 p-lg-0">
+          <a href="/dashboard" class="nav-item nav-link active">Home</a>
+          <a href="/reports" class="nav-item nav-link">Reports</a>
+          <a href="/medicines" class="nav-item nav-link">Medicines</a>
+          <a href="/appoiment" class="nav-item nav-link">Appoiments</a>
+      </div>
+      <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">signout<i class="fa fa-arrow-right ms-3"></i></a>
+  </div>
+</nav>
