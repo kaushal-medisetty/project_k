@@ -1,4 +1,4 @@
-<%- include("partials/w3_head") -%>
+<%- include("partials/head_dashboard") -%>
 
 <body>
   <link rel="stylesheet" href="/css/uploadstyle.css" rel="stylesheet">
@@ -11,9 +11,9 @@
     <div class="page-center">
       
       
-      <h1>Add Your <strong>Medicines</strong> To HealthSync Profile</h1><b>
+      <h1>Add Your <strong> Doctors</strong> To HealthSync Profile</h1><b>
         <form action="/alerta" method="post" >
-        <div><label><h4>Name Of doc</label> <br><input type="text" name="doc_name1" value=""></div>
+        <div><label><h4>Name Of Doctors</label> <br><input type="text" name="doc_name1" value=""></div>
         <div><label>Description</label><br><input type="text" name="description1" value=""><br>
         <div><label>DATE</label><br><input type="date" name="date" ><br>
         <br><label for="appt">Select a Time:</label><br></div>
@@ -24,4 +24,5 @@
       </div >
     </div>
   </div>
+  <script src="/js/bootstrap.bundle.min.js"></script>
         </body>

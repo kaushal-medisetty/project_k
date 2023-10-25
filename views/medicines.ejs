@@ -1,54 +1,79 @@
-<%- include("partials/w3_head") -%>
+<%- include("partials/head_dashboard") -%>
 <body>
 <%- include("partials/nav") -%>
-</style>
+
+<div class="container">
+  <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+      <p class="d-inline-block border rounded-pill py-1 px-4">Medicines</p>
+      <h1>Health Care Solutions</h1>
+  </div>
 <div class="w3-container" >
 
   <form action="/medicines_uploder" method="get" >
-    <button type="submit" class="btn btn-primary" >Add</button>
+    <button type="submit"  class="btn btn-success" >Add</button>
 </form>
   
 </div> 
 
+
 <style>
-    .card {
-        margin-right: auto;
-        margin-left: auto;
-        box-shadow: 0 15px 25px rgba(18, 34, 54, 0.2);
-        border-radius: 5px;
-        backdrop-filter: blur(14px);
-        background-color: rgba(219, 221, 224, 0.2);
-        color: #20256d;
-    }
+  .card {
+      border: none;
+      background: #f5f5f5; /* Background color */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      transition: transform 0.2s;
+  }
 
+  .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+  }
 
+  .card-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333; /* Title color */
+      margin-bottom: 10px;
+  }
+
+  .card-text {
+      color: #555; /* Text color */
+      margin-bottom: 20px;
+  }
+
+  .btn-primary {
+      background-color: #007BFF; /* Button background color */
+      border-color: #007BFF;
+      color: #fff; /* Button text color */
+      transition: background-color 0.3s;
+  }
+
+  .btn-primary:hover {
+      background-color: #0056b3; /* Button background color on hover */
+  }
 </style>
-<div class="album py-5" >
 
-<div class="container">
-   
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      <% rep.forEach((post) => {%>
-        <div class="col" >
-          
-            <div class="card shadow-sm "  style="width: 18rem; " >
-                
-                    <div class="card-body">
-                       <label>Drug</label> <h5 class="card-title"><%=post.Doc_name%></h5>
-                       <label>Description</label><p class="card-text">sdada</p>
-                       <label>time</label><p class="card-text"><%=post.report_time%></p>
-                       <form action="/alert_remove" method="post">
-                        <button type="submit" value="<%=post._id%>" name="remove" value="" >remove</button>
+
+<div class="album py-5">
+  <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          <% rep.forEach((post) => { %>
+          <div class="col">
+              <div class="card mb-4 shadow-sm">
+                  <div class="card-body">
+                      <h5 class="card-title"><strong>Drug:</strong> <%= post.Drug %></h5>
+                      <p class="card-text"><strong>Description:</strong> <%= post.desc %></p>
+                      <p class="card-text"><strong>Time:</strong> <%= post.report_time %></p>
+                      <form action="/alert_remove" method="post">
+                          <button type="submit" value="<%= post._id %>" name="remove" class="btn btn-primary">Remove</button>
                       </form>
-                    </div>
-                    
-            </div>
-            
-        </div>
-        <%});%>
-    </div>
-    
+                  </div>
+              </div>
+          </div>
+          <% }); %>
+      </div>
+  </div>
 </div>
-
-
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>

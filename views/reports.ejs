@@ -1,17 +1,24 @@
-<%- include("partials/w3_head") -%>
+<%- include("partials/head_dashboard") -%>
 <body>
 <%- include("partials/nav") -%>
-</style>
+<div class="container">
+  <div class="text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 600px;">
+      <p class="d-inline-block border rounded-pill py-1 px-4">Reports</p>
+      <h1>Health Care Solutions</h1>
+  </div>
+  <div class="container">
 <div class="w3-container" >
 
   <form action="/upload" method="get" >
     <button type="submit" class="btn btn-primary" >Upload</button>
 </form>
   
+
+</div> 
 </div> 
 
 <% rep.forEach((post) => {%>
-<div class="container">
+<div class="container" style="margin-top: 20px;">
   
     <div class="col-md-10">
       <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -21,7 +28,7 @@
           <div class="mb-1 text-body-secondary"><%=post.data %></div>
           <p class="mb-auto"><%=post.desc%></p>
           <form action="/report_del" method="post">
-          <button type="submit" class="btn btn-primary" name="delete" value= "<%=post._id %>">delete</button>
+          <button type="submit" class="btn btn-primary" name="delete" value= "<%=post._id %>" style="margin-right: 10px;">delete</button>
         
         <% var str=post.dest+"/"+post.report_name %>
         
@@ -40,5 +47,5 @@
 </div>
 <%});%>
 
-
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
